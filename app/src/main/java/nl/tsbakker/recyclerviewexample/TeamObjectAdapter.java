@@ -3,6 +3,7 @@ package nl.tsbakker.recyclerviewexample;
 
 import android.content.Context;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,44 +27,53 @@ public class TeamObjectAdapter extends RecyclerView.Adapter<TeamObjectViewHolder
 //
 
     private Context context;
-    public List<TeamObject> mDataset;
-    private RecyclerViewClickListener mListener;
+    public List<TeamObject> listTeamObject;
 
-    TeamObjectAdapter(RecyclerViewClickListener listener) {
-        mListener = listener;
+
+    //
+    // Constructor
+    //
+    public TeamObjectAdapter(Context context, List<TeamObject> listTeamObject) {
+        this.context = context;
+        this.listTeamObject = listTeamObject;
+
     }
 
-    public void updateData(List<TeamObject> dataset) {
-        mDataset.clear();
-        mDataset.addAll(dataset);
-        notifyDataSetChanged();
-    }
-
+    // onCreateViewHolder
+    // called when the RecyclerView instantiates a new ViewHolder instance
+    // (inflates the items view from xml → creates them in code → return a new ViewHolder object).
     @Override
     public TeamObjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        View v = LayoutInflater.from(context).inflate(R.layout.grid_team, parent, false);
-        return new TeamObjectViewHolder(v, mListener);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_team, parent, false);
+        return new TeamObjectViewHolder(view);
     }
 
+
+    // onBindViewHolder:
+    // called when RecyclerView wants to populate the view with data from our model so that the user can see it.
+
+
     @Override
-    public void onBindViewHolder(final TeamObjectViewHolder holder, final int position) {
-        if (holder instanceof TeamObjectViewHolder) {
-            TeamObjectViewHolder rowHolder = (TeamObjectViewHolder) holder;
-            final TeamObject TeamObject = mDataset.get(position);
-            holder.teamName.setText(TeamObject.getmTeamName());
-        }
+    public void onBindViewHolder(final TeamObjectViewHolder holder, int position) {
+        // Gets a single item in the list from its position
+        TeamObject TeamObject = listTeamObject.get(position);
+        // The holder argument is used to reference the views inside the viewHolder
+        // Populate the views with the data from the list
+        holder.teamName.setText(TeamObject.getTeamName());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return listTeamObject.size();
     }
 
-    // Remove an item from the RecyclerView
-    public void deleteItem(int index) {
-        mDataset.remove(index);
-    }
+    public void swapList (List<TeamObject> newList) {
+        listTeamObject = newList;
+        if (newList != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
 
+    }
 
 }

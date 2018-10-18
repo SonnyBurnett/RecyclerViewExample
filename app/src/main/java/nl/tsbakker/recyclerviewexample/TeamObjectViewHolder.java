@@ -15,31 +15,19 @@ import android.widget.TextView;
 // Date:    7-10-2018
 //
 
-public class TeamObjectViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+public class TeamObjectViewHolder extends RecyclerView.ViewHolder {
 
 
     public TextView teamName;
     public TextView teamLocation;
     public View view;
 
-    //public TeamObjectViewHolder(View itemView) {
-    //    super(itemView);
-    //    teamName = itemView.findViewById(R.id.team_name);
-    //    //teamLocation = itemView.findViewById(R.id.team_location);
-    //    view = itemView;
-    //}
 
-    private RecyclerViewClickListener mListener;
-
-    TeamObjectViewHolder(View v, RecyclerViewClickListener listener) {
+    TeamObjectViewHolder(View v) {
         super(v);
-        mListener = listener;
-        v.setOnClickListener(this);
+        teamName = itemView.findViewById(R.id.team_name);
+        view = v;
     }
 
-    @Override
-    public void onClick(View view) {
-        mListener.onClick(view, getAdapterPosition());
-    }
 
 }

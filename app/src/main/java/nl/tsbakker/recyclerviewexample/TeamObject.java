@@ -1,58 +1,80 @@
 package nl.tsbakker.recyclerviewexample;
 
-public class TeamObject {
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 //
 // Name:    TeamObject
-// Purpose: Handle the datamodel
+// Purpose: Handle the datamodel with room
 // Author:  Taco Bakker
-// Date:    7-10-2018
+// Date:    14-10-2018
 //
 
 
+@Entity(tableName = "teamObject")
+public class TeamObject implements Parcelable {
+
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    @ColumnInfo (name = "TeamName")
     private String mTeamName;
-    private String mTeamLocation;
 
-
-    public TeamObject(String mTeamName, String mTeamLocation) {
-        this.mTeamName = mTeamName;
-        this.mTeamLocation = mTeamLocation;
-    }
-
-    public String getmTeamName() {
+    public String getTeamName() {
         return mTeamName;
     }
 
-    public void setmTeamName(String mTeamName) {
+    public void setTeamName(String mTeamName) {
         this.mTeamName = mTeamName;
     }
 
-    public String getmTeamLocation() {
-        return mTeamLocation;
+    public long getId() {
+        return id;
     }
 
-    public void setmTeamLocation(String mTeam) {
-        this.mTeamLocation = mTeamLocation;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    //
-    // Specify some initial values
-    // That can be used to create new objects
-    //
 
-    public static final String[] PRE_DEFINED_TEAM_OBJECT_NAMES = {
-            "Ajax",
-            "PSV",
-            "AZ",
-            "PEC"
+    public TeamObject(String mTeamName) {
+        this.mTeamName = mTeamName;
+    }
+
+    @Override
+    public String toString() {
+        return mTeamName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.mTeamName);
+    }
+
+    protected TeamObject(Parcel in) {
+        this.id = in.readLong();
+        this.mTeamName = in.readString();
+    }
+
+    public static final Creator<TeamObject> CREATOR = new Creator<TeamObject>() {
+        @Override
+        public TeamObject createFromParcel(Parcel source) {
+            return new TeamObject(source);
+        }
+
+        @Override
+        public TeamObject[] newArray(int size) {
+            return new TeamObject[size];
+        }
     };
-
-    public static final String[] PRE_DEFINED_TEAM_OBJECT_LOCATIONS = {
-            "Amsterdam",
-            "Eindhoven",
-            "Alkmaar",
-            "Zwolle"
-    };
-
-
 }
